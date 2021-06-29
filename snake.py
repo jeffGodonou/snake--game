@@ -4,7 +4,6 @@ Created by: Jeff G.
 Inspired by: https://www.edureka.co/blog/snake-game-with-pygame/
 """
 
-
 import pygame
 import random
 import time
@@ -30,16 +29,28 @@ snake_block = 10
 snake_speed = 15
 
 font_style = pygame.font.SysFont("bahnschrift", 25)
-score_font = pygame.font.SysFont("comicSanms", 35)
+score_font = pygame.font.SysFont("bahnschrift", 35)
 
+"""
+ Define the score
+ TODO: review the way to display the score. It doesn't appear
+       when the game is started.
+"""
 def your_score(score):
-    value = score_font.render("Your score: " + str(score), True, yellow)
+    value = score_font.render("Score: " + str(score), True, yellow)
     dis.blit(value, [0, 0])
 
+"""
+ Draw the snake
+"""
 def our_snake(snake_block, snake_list):
     for x in snake_list:
         pygame.draw.rect(dis, black, [x[0], x[1], snake_block, snake_block])
 
+"""
+ Define the message at the end
+ TODO : review the displaying of message. 
+"""
 def message (msg, color):
     m = font_style.render(msg, True, color)
     dis.blit(m, [dis_width / 6, dis_height / 3])
@@ -65,6 +76,7 @@ def gameloop():
         while game_close == True:
             dis.fill(white)
             message("You lost! Pree Q-Quit or P-Play again", red)
+            your_score(Length_of_snake - 1)
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -121,6 +133,7 @@ def gameloop():
             Length_of_snake += 1
 
         clock.tick(snake_speed)
+        your_score(Length_of_snake - 1)
 
     pygame.quit()
     quit()

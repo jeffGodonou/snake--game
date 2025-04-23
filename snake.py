@@ -73,7 +73,7 @@ def gameloop():
 
     ## Randomly generate the food
     foodx = round(random.randrange(0, dis_width - (2 * snake_block)) / 10.0) * 10.0
-    foody = round(random.randrange(0, dis_width - (2 * snake_block)) / 10.0) * 10.0
+    foody = round(random.randrange(0, dis_height - (2 * snake_block)) / 10.0) * 10.0
     
     ## Game Pause behavior
     def pause_game():
@@ -124,7 +124,7 @@ def gameloop():
                 elif event.key == pygame.K_p:
                     game_pause = True
                     pause_game()
-                elif event.key == event.K_ESCAPE:
+                elif event.key == pygame.K_ESCAPE:
                     game_over = True
     
         if x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0:

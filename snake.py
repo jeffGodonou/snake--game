@@ -14,6 +14,10 @@ TODO: create obstacle in the game
 TODO: create levels
 TODO: handle the pause button
 """
+
+"""
+Define colors
+"""
 black = (0, 0, 0)
 blue = (50, 50, 100)
 green  = (0, 255, 0)
@@ -36,14 +40,14 @@ font_style = pygame.font.SysFont("timesnewroman", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
 
 """
- Define the score
+Define the score
 """
 def your_score(score):
     value = score_font.render("Score: " + str(score), True, yellow)
     dis.blit(value, [0, 0])
 
 """
- Draw the snake
+Draw the snake
 """
 def our_snake(snake_block, snake_list):
     for x in snake_list:
@@ -67,8 +71,23 @@ def gameloop():
     snake_List = []
     Length_of_snake = 1
 
+    ## Randomly generate the food
     foodx = round(random.randrange(0, dis_width - (2 * snake_block)) / 10.0) * 10.0
     foody = round(random.randrange(0, dis_width - (2 * snake_block)) / 10.0) * 10.0
+    
+    ## Game Pause behavior
+    def pause_game():
+        while game_pause:
+            message("Game paused. Press C to continue or Q to quit", red)
+            your_score(Length_of_snake - 1)
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_c:
+                        game_pause = False
+                    elif event.key == pygame.K_q:
+                        pygame.quit()
+                        quit()
 
     while not game_over:
 
@@ -104,6 +123,7 @@ def gameloop():
                     y1_change = snake_block
                 elif event.key == pygame.K_p:
                     game_pause = True
+                    pause_game()
                 elif event.key == event.K_ESCAPE:
                     game_over = True
     

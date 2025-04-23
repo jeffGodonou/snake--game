@@ -77,6 +77,7 @@ def gameloop():
     
     ## Game Pause behavior
     def pause_game():
+        game_pause = True
         while game_pause:
             message("Game paused. Press C to continue or Q to quit", red)
             your_score(Length_of_snake - 1)

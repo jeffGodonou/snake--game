@@ -12,7 +12,6 @@ pygame.init()
 """
 TODO: create obstacle in the game 
 TODO: create levels
-TODO: handle the pause button
 """
 
 """
@@ -56,8 +55,26 @@ def our_snake(snake_block, snake_list):
 def message (msg, color):
     m = font_style.render(msg, True, color)
     dis.blit(m, [dis_width / 4, dis_height / 2])
+    
+def main_menu():
+    menu = True
+    while menu:
+        dis.fill(blue)
+        title = font_style.render("Main Menu", True, white)
+        dis.blit(title, [dis_width / 4, dis_height / 4])
+        message("Press T for Timer Mode or P for Training Mode", white)
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_t:
+                    gameloop(timer_mode = True)
+                elif event.key == pygame.K_p:
+                    gameloop(timer_mode = False)
 
-def gameloop(): 
+def gameloop(timer_mode): 
     game_over = False
     game_pause = False
     game_close = False
@@ -74,6 +91,10 @@ def gameloop():
     ## Randomly generate the food
     foodx = round(random.randrange(0, dis_width - (2 * snake_block)) / 10.0) * 10.0
     foody = round(random.randrange(0, dis_height - (2 * snake_block)) / 10.0) * 10.0
+    
+    ## Start the time
+    start_time = time.time()
+    time_limit = 180 if timer_mode else None
     
     ## Game Pause behavior
     def pause_game():
@@ -104,7 +125,7 @@ def gameloop():
                         game_over = True
                         game_close = False
                     elif event.key == pygame.K_r:
-                        gameloop()
+                        gameloop(timer_mode)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -157,6 +178,15 @@ def gameloop():
 
         our_snake(snake_block, snake_List)
         your_score(Length_of_snake - 1)
+        
+        ## Display the timer if in timer mode
+        if timer_mode:
+            elapsed_time = time.time() - start_time
+            remaining_time = max(0, time_limit - elapsed_time)
+            timer_text = font_style.render(f"Time Left: {int(remaining_time)}", True , red)
+            dis.blit(timer_text, [dis_width -200, 0])
+            if remaining_time <= 0:
+                game_close = True
 
         pygame.display.update()
 
@@ -170,4 +200,4 @@ def gameloop():
     pygame.quit()
     quit()
 
-gameloop()
+main_menu()

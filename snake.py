@@ -52,6 +52,9 @@ def our_snake(snake_block, snake_list):
     for x in snake_list:
         pygame.draw.rect(dis, black, [x[0], x[1], snake_block, snake_block])
 
+"""
+Define message object
+"""
 def message (msg, color):
     lines = msg.split('\n')
     y_offset = dis_height / 2
@@ -60,13 +63,35 @@ def message (msg, color):
         dis.blit(m, [dis_width / 5, y_offset])
         y_offset += 30
     
+def game_over_screen(timer_mode):
+    over = True 
+    while over:
+        dis.fill(white)
+        message("Game Over!\n Press: \nM-Main Menu\nQ-Quit\nR-Play again", black)
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q:
+                    pygame.quit()
+                    quit()
+                elif event.key == pygame.K_r:
+                    gameloop(timer_mode)
+                elif event.key == pygame.K_m:
+                    main_menu()    
+    
+"""
+Main menu function
+"""    
 def main_menu():
     menu = True
     while menu:
         dis.fill(blue)
         title = font_style.render("Main Menu", True, white)
         dis.blit(title, [dis_width / 2.5, dis_height / 3])
-        message(" Press T for Timer Mode \n Press P for Training Mode", white)
+        message(" Press T-Timer Mode \n Press P-Training Mode", white)
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -118,21 +143,7 @@ def gameloop(timer_mode):
     while not game_over:
 
         while game_close == True:
-            dis.fill(blue)
-            message("You lost! Press Q-Quit or R-Play again", red)
-            your_score(Length_of_snake - 1)
-            pygame.display.update()
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q:
-                        game_over = True
-                        game_close = False
-                    elif event.key == pygame.K_r:
-                        gameloop(timer_mode)
+            game_over_screen(timer_mode)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

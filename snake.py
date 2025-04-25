@@ -53,16 +53,20 @@ def our_snake(snake_block, snake_list):
         pygame.draw.rect(dis, black, [x[0], x[1], snake_block, snake_block])
 
 def message (msg, color):
-    m = font_style.render(msg, True, color)
-    dis.blit(m, [dis_width / 4, dis_height / 2])
+    lines = msg.split('\n')
+    y_offset = dis_height / 2
+    for line in lines:
+        m = font_style.render(line, True, color)
+        dis.blit(m, [dis_width / 5, y_offset])
+        y_offset += 30
     
 def main_menu():
     menu = True
     while menu:
         dis.fill(blue)
         title = font_style.render("Main Menu", True, white)
-        dis.blit(title, [dis_width / 4, dis_height / 4])
-        message("Press T for Timer Mode or P for Training Mode", white)
+        dis.blit(title, [dis_width / 2.5, dis_height / 3])
+        message(" Press T for Timer Mode \n Press P for Training Mode", white)
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -120,7 +124,10 @@ def gameloop(timer_mode):
             pygame.display.update()
 
             for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
                         game_over = True
                         game_close = False

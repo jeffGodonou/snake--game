@@ -63,11 +63,11 @@ def message (msg, color):
         dis.blit(m, [dis_width / 5, y_offset])
         y_offset += 30
     
-def game_over_screen(timer_mode):
+def game_over_screen(timer_mode, score):
     over = True 
     while over:
         dis.fill(white)
-        message("Game Over!\n Press: \nM-Main Menu\nQ-Quit\nR-Play again", black)
+        message("Game Over!\n\n Your score :"+ score +"\n\n Press: \nM-Main Menu\nQ-Quit\nR-Play again", black)
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -129,7 +129,7 @@ def gameloop(timer_mode):
     def pause_game():
         game_pause = True
         while game_pause:
-            message("Game paused. Press C to continue or Q to quit", red)
+            message("Game paused. Press C-continue or Q-quit", red)
             your_score(Length_of_snake - 1)
             pygame.display.update()
             for event in pygame.event.get():
@@ -141,9 +141,6 @@ def gameloop(timer_mode):
                         quit()
 
     while not game_over:
-
-        while game_close == True:
-            game_over_screen(timer_mode)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -195,14 +192,28 @@ def gameloop(timer_mode):
                 game_close = True
 
         our_snake(snake_block, snake_List)
+        score = Length_of_snake - 1
         your_score(Length_of_snake - 1)
+        
+        while game_close == True:
+            game_over_screen(timer_mode, score = str(score))
         
         ## Display the timer if in timer mode
         if timer_mode:
             elapsed_time = time.time() - start_time
             remaining_time = max(0, time_limit - elapsed_time)
-            timer_text = font_style.render(f"Time Left: {int(remaining_time)}", True , red)
+            
+            #change color based on remaining time
+            if remaining_time <= 30:
+                current_time = int(elapsed_time * 2) # blnking effect for the last 30 seconds
+                timer_color = red if current_time % 2 == 0 else yellow
+            else:
+                timer_color = yellow 
+            
+            # Display the timer    
+            timer_text = font_style.render(f"Time Left: {int(remaining_time)}", True , timer_color)
             dis.blit(timer_text, [dis_width -200, 0])
+            
             if remaining_time <= 0:
                 game_close = True
 
